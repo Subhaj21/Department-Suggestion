@@ -786,14 +786,14 @@ def home():
     return {"message": "Complaint Classification API is running 🚀"}
 
 @app.get("/classify")
-def classify(q: str = Query(..., description="Complaint text to classify")):
+def classify(new_text: str):
     # --- ML Model ---
-    dep1 = predict(q)
+    dep1 = predict(new_text)
     if not isinstance(dep1, list):   # ensure list
         dep1 = [dep1]
 
     # --- Keyword Model ---
-    key = sentence_classification(q)
+    key = sentence_classification(new_text)
     dep2 = classify_dept(key)
     if not isinstance(dep2, list):   # ensure list
         dep2 = [dep2]
@@ -860,6 +860,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
