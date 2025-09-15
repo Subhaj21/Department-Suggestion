@@ -759,6 +759,20 @@ def predict(new_text):
 #   texts.append(new_text)
 #   labels.append(lab)
 #   return lab
+def classify_new_sentences(new_text: str):
+    # --- ML Model ---
+    dep1 = predict(new_text)
+    if not isinstance(dep1, list):   # ensure list
+        dep1 = [dep1]
+
+    # --- Keyword Model ---
+    key = sentence_classification(new_text)
+    dep2 = classify_dept(key)
+    if not isinstance(dep2, list):   # ensure list
+        dep2 = [dep2]
+
+    # --- Merging Logic ---
+    return list(set(dep1 + dep2))
   
 
 app = FastAPI()
@@ -790,20 +804,20 @@ def classify(q: str = Query(...)):
     result = classify_new_sentences(q)   # <-- not predict()
     return result
 
-def classify_new_sentences(new_text: str):
-    # --- ML Model ---
-    dep1 = predict(new_text)
-    if not isinstance(dep1, list):   # ensure list
-        dep1 = [dep1]
+# def classify_new_sentences(new_text: str):
+#     # --- ML Model ---
+#     dep1 = predict(new_text)
+#     if not isinstance(dep1, list):   # ensure list
+#         dep1 = [dep1]
 
-    # --- Keyword Model ---
-    key = sentence_classification(new_text)
-    dep2 = classify_dept(key)
-    if not isinstance(dep2, list):   # ensure list
-        dep2 = [dep2]
+#     # --- Keyword Model ---
+#     key = sentence_classification(new_text)
+#     dep2 = classify_dept(key)
+#     if not isinstance(dep2, list):   # ensure list
+#         dep2 = [dep2]
 
-    # --- Merging Logic ---
-    result = list(set(dep1 + dep2))
+#     # --- Merging Logic ---
+#     result = list(set(dep1 + dep2))
     # common = list(set(dep1) & set(dep2))  # intersection
     # if common:
     #     # if at least one match, return common + leftover ML
@@ -864,6 +878,7 @@ def classify_new_sentences(new_text: str):
    
  
 # classify_new_sentences()
+
 
 
 
