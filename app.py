@@ -739,11 +739,11 @@ cls=MultinomialNB()
 def train():
  x=vectorize.fit_transform(texts)
  cls.fit(x,labels)
-train()
+    
 def predict(new_text):
-  # train()
-  # new_text=[new_text]
-  x_new=vectorize.transform([new_text])
+  train()
+  new_text=[new_text]
+  x_new=vectorize.transform([str(new_text)])
   lab=cls.predict(x_new)
   
 #   print(lab)
@@ -763,43 +763,43 @@ def predict(new_text):
 
 app = FastAPI()
 
-@app.get("/classify")
-def classify(q: str = Query(..., description="Complaint text to classify")):
-    # ML model prediction
-    dep1 = predict(q)
-    
-    # Keyword-based prediction
-    key = sentence_classification(q)
-    dep2 = classify_dept(key)
-    
-    # Ensure both are lists
-    dep1_list = [dep1] if not isinstance(dep1, list) else dep1
-    dep2_list = [dep2] if not isinstance(dep2, list) else dep2
-
-    # Merge results
-    result = list(set(dep1_list + dep2_list))
-
-    return {"final": result}
-
-# @app.get("/")
-# def home():
-#     return {"message": "Complaint Classification API is running 🚀"}
-
 # @app.get("/classify")
 # def classify(q: str = Query(..., description="Complaint text to classify")):
-#     # --- ML Model ---
+#     # ML model prediction
 #     dep1 = predict(q)
-#     if not isinstance(dep1, list):   # ensure list
-#         dep1 = [dep1]
-
-#     # --- Keyword Model ---
+    
+#     # Keyword-based prediction
 #     key = sentence_classification(q)
 #     dep2 = classify_dept(key)
-#     if not isinstance(dep2, list):   # ensure list
-#         dep2 = [dep2]
+    
+#     # Ensure both are lists
+#     dep1_list = [dep1] if not isinstance(dep1, list) else dep1
+#     dep2_list = [dep2] if not isinstance(dep2, list) else dep2
 
-#     # --- Merging Logic ---
-#     result = list(set(dep1 + dep2))
+#     # Merge results
+#     result = list(set(dep1_list + dep2_list))
+
+#     return {"final": result}
+
+@app.get("/")
+def home():
+    return {"message": "Complaint Classification API is running 🚀"}
+
+@app.get("/classify")
+def classify(q: str = Query(..., description="Complaint text to classify")):
+    # --- ML Model ---
+    dep1 = predict(q)
+    if not isinstance(dep1, list):   # ensure list
+        dep1 = [dep1]
+
+    # --- Keyword Model ---
+    key = sentence_classification(q)
+    dep2 = classify_dept(key)
+    if not isinstance(dep2, list):   # ensure list
+        dep2 = [dep2]
+
+    # --- Merging Logic ---
+    result = list(set(dep1 + dep2))
     # common = list(set(dep1) & set(dep2))  # intersection
     # if common:
     #     # if at least one match, return common + leftover ML
@@ -860,6 +860,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
