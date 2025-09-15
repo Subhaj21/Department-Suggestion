@@ -742,7 +742,7 @@ def train():
     
 def predict(new_text):
   train()
-  new_text=[new_text]
+  # new_text=[new_text]
   x_new=vectorize.transform([str(new_text)])
   lab=cls.predict(x_new)
   
@@ -889,6 +889,7 @@ def classify(q: str = Query(...)):
    
  
 # classify_new_sentences()
+
 
 
 
