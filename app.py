@@ -759,20 +759,31 @@ def predict(new_text):
 #   texts.append(new_text)
 #   labels.append(lab)
 #   return lab
-def classify_new_sentences(new_text: str):
-    # --- ML Model ---
-    dep1 = predict(new_text)
+def classify_new_sentences():
+    new_text = input("Enter :")
+    
+    # print("\n--- Classification ---")
+    # print("Classified by sentence model")
+
+    dep1 = predict(new_text)  # ML model
     if not isinstance(dep1, list):   # ensure list
         dep1 = [dep1]
+    # print("ML:", dep1)
 
-    # --- Keyword Model ---
     key = sentence_classification(new_text)
-    dep2 = classify_dept(key)
+    # print("Keywords extracted:", key)
+
+    # print("Classified by keyword model")
+    dep2 = classify_dept(key)  # keyword model
     if not isinstance(dep2, list):   # ensure list
         dep2 = [dep2]
+    # print("Keywords:", dep2)
 
-    # --- Merging Logic ---
-    return list(set(dep1 + dep2))
+    # --- merging logic ---
+    result = list(set(dep1 + dep2))  # union, no duplicates
+    print("Final Department(s):", result)
+
+    return {"final": result}
   
 
 app = FastAPI()
@@ -878,6 +889,7 @@ def classify(q: str = Query(...)):
    
  
 # classify_new_sentences()
+
 
 
 
