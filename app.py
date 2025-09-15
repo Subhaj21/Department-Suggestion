@@ -181,9 +181,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 # Training data
+# Training data
 texts = [
     # Public Works
-#    / "There are large potholes on the main road that need urgent repair",
+   "There are large potholes on the main road that need urgent repair",
     "The sidewalk near the market is broken and unsafe for pedestrians",
     "Drainage system near my house is damaged and water is accumulating",
     "Road construction debris has not been cleared for weeks",
@@ -194,7 +195,7 @@ texts = [
     "Speed breaker near the hospital is broken",
     "Bridge near the park has minor damages that need fixing",
     "Uneven road near residential area is dangerous",
-    # "Construction debris blocking the street is unsafe",
+    "Construction debris blocking the street is unsafe",
     "The main road has large cracks causing vehicle damage",
     "Road repair near the market is delayed",
     "Potholes are forming rapidly on the highway",
@@ -235,7 +236,20 @@ texts = [
     "Flyover near school is unsafe",
     "Potholes near junction causing traffic issues",
 
-    # Street Lighting & Electrical
+    
+
+]
+
+labels = [
+    # Public Works
+    *["Public Works"]*50
+    
+]
+
+# Street Lighting & Electrical
+texts += [
+       
+
     "Streetlight on 5th Avenue is not working at night",
     "Electric wires are hanging dangerously near the park",
     "Transformer near the market caught fire last night",
@@ -288,7 +302,13 @@ texts = [
     "Overhead wiring problem near school",
     "Short circuit causing blackout",
 
-    # Parks & Recreation
+]
+
+labels += ["Street Lighting & Electrical"]*50
+
+# Parks & Recreation
+texts += [
+       
     "Playground swings are broken in the central park",
     "Garden benches are damaged and need replacement",
     "Public park paths are full of litter and unsafe",
@@ -342,14 +362,7 @@ texts = [
     "Community park fountain leaking"
 ]
 
-labels = [
-    # Public Works
-    *["Public Works"]*50,
-    # Street Lighting & Electrical
-    *["Street Lighting & Electrical"]*50,
-    # Parks & Recreation
-    *["Parks & Recreation"]*50,
-]
+labels += ["Parks & Recreation"]*50
 
 # Water Supply
 texts += [
@@ -695,6 +708,7 @@ labels += ["Environmental Department"] * 50
 
 
 
+
 # Create vectorizer and model
 vectorize=CountVectorizer()
 cls=MultinomialNB()
@@ -767,3 +781,4 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
