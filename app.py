@@ -786,7 +786,11 @@ def home():
     return {"message": "Complaint Classification API is running 🚀"}
 
 @app.get("/classify")
-def classify(new_text: str):
+def classify(q: str = Query(...)):
+    result = classify_new_sentences(q)   # <-- not predict()
+    return result
+
+def classify_new_sentences(new_text: str):
     # --- ML Model ---
     dep1 = predict(new_text)
     if not isinstance(dep1, list):   # ensure list
@@ -860,6 +864,7 @@ def classify(new_text: str):
    
  
 # classify_new_sentences()
+
 
 
 
