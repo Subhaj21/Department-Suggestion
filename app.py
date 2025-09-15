@@ -184,8 +184,8 @@ from sklearn.naive_bayes import MultinomialNB
 # Training data
 texts = [
     # Public Works
-   "There are large potholes on the main road that need urgent repair",
-    "The sidewalk near the market is broken and unsafe for pedestrians",
+   # "There are large potholes on the main road that need urgent repair",
+    # "The sidewalk near the market is broken and unsafe for pedestrians",
     "Drainage system near my house is damaged and water is accumulating",
     "Road construction debris has not been cleared for weeks",
     "The street near my home has cracks and uneven asphalt",
@@ -781,4 +781,5 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
