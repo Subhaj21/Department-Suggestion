@@ -1,3 +1,4 @@
 ﻿fastapi
 uvicorn[standard]
 spacy
+en-core-web-sm==3.6.0
