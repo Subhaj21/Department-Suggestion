@@ -162,17 +162,38 @@ departments = {
 
 
 
+# def classify_dept(key):
+#     dept_score={dept:0 for dept in departments}
+#     for dept, dept_keywords in departments.items():
+#         for word in key:
+#             if word in dept_keywords:
+#                 dept_score[dept]+=1
+#     depp=max(dept_score,key=dept_score.get)
+#     if depp==0:
+#         return "No matching department found"
+#     else:
+#         return depp
 def classify_dept(key):
-    dept_score={dept:0 for dept in departments}
+    dept_score = {dept: 0 for dept in departments}
+
+    # Count matches
     for dept, dept_keywords in departments.items():
         for word in key:
             if word in dept_keywords:
-                dept_score[dept]+=1
-    depp=max(dept_score,key=dept_score.get)
-    if depp==0:
+                dept_score[dept] += 1
+
+    max_score = max(dept_score.values())
+
+    if max_score == 0:
         return "No matching department found"
-    else:
-        return depp
+
+    # collect all depts with the same max score
+    best_depts = [dept for dept, score in dept_score.items() if score == max_score]
+
+    # print(dept_score)  # debug
+
+    # return one dept or list of depts
+    return best_depts if len(best_depts) > 1 else best_depts[0]
         
 # print(classify_dept(key))
 
@@ -736,17 +757,46 @@ app = FastAPI()
 def home():
     return {"message": "Complaint Classification API is running 🚀"}
 
-
 @app.get("/classify")
 def classify(q: str = Query(..., description="Complaint text to classify")):
-    dep1 = predict(q)  # ML model prediction
+    # --- ML Model ---
+    dep1 = predict(q)
+    if not isinstance(dep1, list):   # ensure list
+        dep1 = [dep1]
+
+    # --- Keyword Model ---
     key = sentence_classification(q)
-    dep2 = classify_dept(key)  # Keyword-based classification
-    
-    if dep1 == dep2:
-        return {"department": dep1}
+    dep2 = classify_dept(key)
+    if not isinstance(dep2, list):   # ensure list
+        dep2 = [dep2]
+
+    # --- Merging Logic ---
+    common = list(set(dep1) & set(dep2))  # intersection
+    if common:
+        # if at least one match, return common + leftover ML
+        result = common + [d for d in dep1 if d not in common]
     else:
-        return {"department": f"{dep1} (ML) and {dep2} (Keywords)"}
+        # no matches, return all unique values
+        result = list(set(dep1 + dep2))
+
+    return {
+        "input": q,
+        "ml_dept": dep1,
+        "keyword_dept": dep2,
+        "final_department": result
+    }
+# @app.get("/classify")
+# def classify(q: str = Query(..., description="Complaint text to classify")):
+#     dep1 = predict(q)  # ML model prediction
+#     key = sentence_classification(q)
+#     dep2 = classify_dept(key)  # Keyword-based classification
+    
+#     if dep1 == dep2:
+#         return {"department": dep1}
+#     else:
+#         return {"department": f"{dep1} (ML) and {dep2} (Keywords)"}
+
+
 
 
 
@@ -781,5 +831,6 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
