@@ -1,7 +1,14 @@
 # this code is here to make the sentences into keywords
 import spacy
 from fastapi import FastAPI, Query
-nlp = spacy.load("en_core_web_sm")
+from spacy.cli import download
+import os
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    # Download the model if not found
+    download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 def sentence_classification(sentence):
     doc=nlp(sentence)
