@@ -743,7 +743,7 @@ train()
 def predict(new_text):
   # train()
   new_text=[new_text]
-  x_new=vectorize.transform([str(new_text)])
+  x_new=vectorize.transform([new_text])
   lab=cls.predict(x_new)
   
 #   print(lab)
@@ -842,6 +842,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
