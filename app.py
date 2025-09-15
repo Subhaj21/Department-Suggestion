@@ -759,32 +759,6 @@ def predict(new_text):
 #   texts.append(new_text)
 #   labels.append(lab)
 #   return lab
-def classify_new_sentences():
-    new_text = input("Enter :")
-    
-    # print("\n--- Classification ---")
-    # print("Classified by sentence model")
-
-    dep1 = predict(new_text)  # ML model
-    if not isinstance(dep1, list):   # ensure list
-        dep1 = [dep1]
-    # print("ML:", dep1)
-
-    key = sentence_classification(new_text)
-    # print("Keywords extracted:", key)
-
-    # print("Classified by keyword model")
-    dep2 = classify_dept(key)  # keyword model
-    if not isinstance(dep2, list):   # ensure list
-        dep2 = [dep2]
-    # print("Keywords:", dep2)
-
-    # --- merging logic ---
-    result = list(set(dep1 + dep2))  # union, no duplicates
-    print("Final Department(s):", result)
-
-    return {"final": result}
-  
 
 app = FastAPI()
 
@@ -811,9 +785,21 @@ def home():
     return {"message": "Complaint Classification API is running 🚀"}
 
 @app.get("/classify")
-def classify(q: str = Query(...)):
-    result = classify_new_sentences(q)   # <-- not predict()
-    return result
+def classify(q: str = Query(..., description="Complaint text to classify")):
+    # ML model
+    x_new = vectorizer.transform([q])
+    dep1 = clf.predict(x_new)[0]
+
+    # Keyword model
+    key = sentence_classification(q)
+    dep2 = classify_dept(key)
+
+    # Merge
+    dep1_list = [dep1] if isinstance(dep1, str) else dep1
+    dep2_list = dep2 if isinstance(dep2, list) else [dep2]
+    result = list(set(dep1_list + dep2_list))
+
+    return {"final": result}
 
 # def classify_new_sentences(new_text: str):
 #     # --- ML Model ---
@@ -889,6 +875,7 @@ def classify(q: str = Query(...)):
    
  
 # classify_new_sentences()
+
 
 
 
