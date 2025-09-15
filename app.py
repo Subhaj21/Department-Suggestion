@@ -739,9 +739,9 @@ cls=MultinomialNB()
 def train():
  x=vectorize.fit_transform(texts)
  cls.fit(x,labels)
-
+train()
 def predict(new_text):
-  train()
+  # train()
   new_text=[new_text]
   x_new=vectorize.transform([str(new_text)])
   lab=cls.predict(x_new)
@@ -842,6 +842,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
