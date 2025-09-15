@@ -742,13 +742,23 @@ def train():
 
 def predict(new_text):
   train()
-  x_new=vectorize.transform([new_text])
-  lab=cls.predict(x_new)[0]
+  new_text=[new_text]
+  x_new=vectorize.transform([str(new_text)])
+  lab=cls.predict(x_new)
   
 #   print(lab)
   texts.append(new_text)
   labels.append(lab)
-  return lab
+  return str(lab[0])
+# def predict(new_text):
+#   train()
+#   x_new=vectorize.transform([new_text])
+#   lab=cls.predict(x_new)[0]
+  
+# #   print(lab)
+#   texts.append(new_text)
+#   labels.append(lab)
+#   return lab
   
 
 app = FastAPI()
@@ -771,19 +781,20 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
         dep2 = [dep2]
 
     # --- Merging Logic ---
-    common = list(set(dep1) & set(dep2))  # intersection
-    if common:
-        # if at least one match, return common + leftover ML
-        result = common + [d for d in dep1 if d not in common]
-    else:
-        # no matches, return all unique values
-        result = list(set(dep1 + dep2))
+    result = list(set(dep1 + dep2))
+    # common = list(set(dep1) & set(dep2))  # intersection
+    # if common:
+    #     # if at least one match, return common + leftover ML
+    #     result = common + [d for d in dep1 if d not in common]
+    # else:
+    #     # no matches, return all unique values
+    #     result = list(set(dep1 + dep2))
 
-    return {
-        "input": q,
-        "ml_dept": dep1,
-        "keyword_dept": dep2,
-        "final_department": result
+    return { result
+        # "input": q,
+        # "ml_dept": dep1,
+        # "keyword_dept": dep2,
+        # "final_department": result
     }
 # @app.get("/classify")
 # def classify(q: str = Query(..., description="Complaint text to classify")):
@@ -831,6 +842,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
