@@ -780,6 +780,7 @@ app = FastAPI()
 
 #     return {"final": result}
 
+app = FastAPI()
 @app.get("/")
 def home():
     return {"message": "Complaint Classification API is running 🚀"}
@@ -787,8 +788,9 @@ def home():
 @app.get("/classify")
 def classify(q: str = Query(..., description="Complaint text to classify")):
     # ML model
-    x_new = vectorizer.transform([q])
-    dep1 = clf.predict(x_new)[0]
+    train()
+    x_new = vectorize.transform([q])
+    dep1 = cls.predict(x_new)[0]
 
     # Keyword model
     key = sentence_classification(q)
@@ -875,6 +877,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
