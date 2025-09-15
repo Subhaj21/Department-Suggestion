@@ -790,7 +790,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
     #     # no matches, return all unique values
     #     result = list(set(dep1 + dep2))
 
-    return { result
+    return { "final": result
         # "input": q,
         # "ml_dept": dep1,
         # "keyword_dept": dep2,
@@ -842,6 +842,7 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
    
  
 # classify_new_sentences()
+
 
 
 
