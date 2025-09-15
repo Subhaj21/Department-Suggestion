@@ -897,17 +897,17 @@ labels += ["Environmental Department"] * 50
 
 
 # Create vectorizer and model
-vectorize=CountVectorizer()
-cls=MultinomialNB()
-
-
-# Step 2: Train
 def train():
- x=vectorize.fit_transform(texts)
- cls.fit(x,labels)
+    global vectorize, cls
+    vectorize = CountVectorizer()
+    X = vectorize.fit_transform(texts)
+    cls = MultinomialNB()
+    cls.fit(X, labels)
+
+# ✅ Train once when server starts
+train()
 
 def predict(new_text):
-  train()
   new_text=[new_text]
   x_new=vectorize.transform([str(new_text)])
   lab=cls.predict(x_new)
@@ -1025,3 +1025,4 @@ def classify(q: str = Query(..., description="Complaint text to classify")):
     result = list(set(dep1_list + dep2_list))
 
     return {"final": result}
+
