@@ -1,5 +1,6 @@
 ﻿fastapi
 uvicorn[standard]
 spacy
+scikit-learn
 
 
