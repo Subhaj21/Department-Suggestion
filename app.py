@@ -1008,21 +1008,25 @@ app = FastAPI()
 def home():
     return {"message": "Complaint Classification API is running 🚀"}
 
-@app.get("/classify")
-def classify(q: str = Query(..., description="Complaint text to classify")):
-    # ML model
-    train()
-    x_new = vectorize.transform([q])
-    dep1 = cls.predict(x_new)[0]
+@app.route("/classify")
+def classify_new_sentences():
+    q = request.args.get("q")
+    if not q:
+        return jsonify({"error": "No text provided"}), 400
 
-    # Keyword model
-    key = sentence_classification(q)
-    dep2 = classify_dept(key)
+    dep1 = predict(q)  # ML model
+    dep2 = classify_dept(sentence_classification(q))  # keyword model
+    result = list(set([dep1] + dep2))  # merge unique
 
-    # Merge
-    dep1_list = [dep1] if isinstance(dep1, str) else dep1
-    dep2_list = dep2 if isinstance(dep2, list) else [dep2]
-    result = list(set(dep1_list + dep2_list))
+    # --- Debug Logging ---
+    print("\n--- DEBUG ---")
+    print("Input query:", q)
+    print("ML dep1:", dep1)
+    print("Keyword dep2:", dep2)
+    print("Final merged:", result)
+    print("--------------\n")
 
-    return {"final": result}
+    return jsonify({"final": result})
+
+
 
